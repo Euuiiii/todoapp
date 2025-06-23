@@ -15,18 +15,19 @@ const addTask = () => {
     if (taskText === "") {
         alert("You must add a task mf!");
         return;
-    }  
+    }
 
     const clone = taskTemplate.content.cloneNode(true);
     clone.querySelector(".taskText").textContent = taskText;
     clone.querySelector(".taskDescription").textContent = description;
-    clone.querySelector(".taskDueDate").textContent = "Due: " + dueDate;
-    clone.querySelector(".taskDueTime").textContent = " at " + dueTime;
+    clone.querySelector(".taskDueDate").textContent = dueDate;
+    clone.querySelector(".taskDueTime").textContent = "at " + dueTime;
 
     const deleteButton = clone.querySelector(".deleteTaskButton");
     const taskMain = clone.querySelector(".taskMain");
     const taskDetails = clone.querySelector(".taskDetails");
-
+    const taskItem = clone.querySelector(".taskItem");
+    const toggleIcon = clone.querySelector(".toggleIcon"); // Get the icon
 
     const listItem = document.createElement("li");
     listItem.appendChild(clone);
@@ -37,9 +38,22 @@ const addTask = () => {
         listItem.remove();
     };
 
-    taskMain.onclick = () => {
-        taskDetails.style.display = taskDetails.style.display === "none" ? "block" : "none";
-    };
+
+    taskMain.addEventListener('click', () => {
+        if (taskDetails.style.display === "none") {
+            taskDetails.style.display = "block";
+            if (toggleIcon) toggleIcon.textContent = "↑"; 
+            taskItem.style.borderColor = '#007bff';
+            taskItem.style.boxShadow = '0 0 8px rgba(0,123,255,0.2)';
+            deleteButton.style.opacity = '1';
+        } else {
+            taskDetails.style.display = "none";
+            if (toggleIcon) toggleIcon.textContent = "↓"; 
+            taskItem.style.borderColor = '#ddd';
+            taskItem.style.boxShadow = 'none';
+            deleteButton.style.opacity = '0';
+        }
+    });
 
     taskInput.value = "";
     taskDescriptionInput.value = "";
