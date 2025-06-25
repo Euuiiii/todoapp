@@ -21,17 +21,23 @@ const addTask = () => {
     clone.querySelector(".taskText").textContent = taskText;
     clone.querySelector(".taskDescription").textContent = description;
     clone.querySelector(".taskDueDate").textContent = dueDate;
-    clone.querySelector(".taskDueTime").textContent = "at " + dueTime;
+    clone.querySelector(".taskDueTime").textContent = "at =" + dueTime;
 
+    const doneButton = clone.querySelector(".doneTaskButton");
     const deleteButton = clone.querySelector(".deleteTaskButton");
     const taskMain = clone.querySelector(".taskMain");
     const taskDetails = clone.querySelector(".taskDetails");
     const taskItem = clone.querySelector(".taskItem");
-    const toggleIcon = clone.querySelector(".toggleIcon"); // Get the icon
+    const toggleIcon = clone.querySelector(".toggleIcon");
 
     const listItem = document.createElement("li");
     listItem.appendChild(clone);
     taskList.appendChild(listItem);
+
+    doneButton.onclick = (e) => {
+        e.stopPropagation();
+        listItem.remove();
+    };
 
     deleteButton.onclick = (e) => {
         e.stopPropagation();
@@ -46,12 +52,14 @@ const addTask = () => {
             taskItem.style.borderColor = '#007bff';
             taskItem.style.boxShadow = '0 0 8px rgba(0,123,255,0.2)';
             deleteButton.style.opacity = '1';
+            doneButton.style.opacity = '1';
         } else {
             taskDetails.style.display = "none";
             if (toggleIcon) toggleIcon.textContent = "↓"; 
             taskItem.style.borderColor = '#ddd';
             taskItem.style.boxShadow = 'none';
             deleteButton.style.opacity = '0';
+            doneButton.style.opacity = '0';
         }
     });
 
