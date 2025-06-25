@@ -94,7 +94,7 @@ gap: 24px;
 }
 
 
-#addTaskButton {
+#addTaskButton, #clearAllButton {
 padding: 14px 28px;
 background: linear-gradient(135deg, #667eea, #764ba2);
 color: white;
@@ -107,13 +107,13 @@ transition: all 0.3s ease;
 box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
-#addTaskButton:hover {
+#addTaskButton:hover , #clearAllButton:hover {
 transform: translateY(-2px);
 box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
 background: linear-gradient(135deg, #5a6fd8, #6b46a3);
 }
 
-#addTaskButton:active {
+#addTaskButton:active , #clearAllButton:active {
 transform: translateY(0);
 }
 
@@ -125,14 +125,47 @@ transform: translateY(0);
     width: 100%;
 }
 
+.taskItem {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.taskItem:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
 .taskMain {
+    display: flex;
+    align-items: center;
+    padding: 16px;
     cursor: pointer;
+    gap: 12px;
 }
 
 .taskText {
+    flex: 1;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333333;
+    word-wrap: break-word;
     text-decoration: underline;
-    color: #007bff;
 }
+
+.toggleIcon {
+    font-size: 14px;
+    color: #666666;
+    transition: transform 0.3s ease;
+    user-select: none;
+}
+
+.taskItem.expanded .toggleIcon {
+    transform: rotate(180deg);
+}
+
 
 .deleteTaskButton {
     opacity: 0;

@@ -5,6 +5,7 @@ const taskDueDate = document.getElementById("dueDateInput");
 const taskDueTime = document.getElementById("dueTimeInput");
 const taskTemplate = document.getElementById("taskTemplate");
 const taskDescriptionInput = document.getElementById("taskDiscription");
+const clear = document.getElementById("clearAllButton");
 
 function saveLocally (){
     const tasksArray = [];
@@ -152,6 +153,7 @@ taskInput.addEventListener("keydown", (e) => {
     }
 });
 taskInput.focus();
+
 
 
 
