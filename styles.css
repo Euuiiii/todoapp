@@ -131,3 +131,8 @@ button:hover {
 .doneTaskButton:hover {
     background-color: rgb(111, 167, 111);
 }
+
+.completed {
+    text-decoration: line-through;
+    opacity: 0.6;
+}
