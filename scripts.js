@@ -7,7 +7,7 @@ const taskTemplate = document.getElementById("taskTemplate");
 const taskDescriptionInput = document.getElementById("taskDiscription");
 const clear = document.getElementById("clearAllButton");
 
-function saveLocally (){
+function saveLocally() {
     const tasksArray = [];
     const listItems = taskList.querySelectorAll("li");
 
@@ -20,13 +20,17 @@ function saveLocally (){
 
         tasksArray.push({ taskText, taskDescription, taskDueDate, taskDueTime, isCompleted });
     });
+
     localStorage.setItem("tasks", JSON.stringify(tasksArray));
 }
 
 function loadTasksFromLocalStorage() {
-    taskList.innerHTML = ""; 
+    taskList.innerHTML = "";
     const tasksJSON = localStorage.getItem("tasks");
-    if (!tasksJSON) return;
+    if (!tasksJSON) {
+        clearButtonShow();
+        return;
+    }
 
     const tasksArray = JSON.parse(tasksJSON);
 
@@ -62,6 +66,7 @@ function loadTasksFromLocalStorage() {
             e.stopPropagation();
             listItem.remove();
             saveLocally();
+            clearButtonShow();
         };
 
         taskMain.addEventListener('click', () => {
@@ -82,12 +87,16 @@ function loadTasksFromLocalStorage() {
             }
         });
     });
+
+    clearButtonShow();
 }
+
 const addTask = () => {
     const taskText = taskInput.value.trim();
     const description = taskDescriptionInput.value.trim();
     const dueDate = taskDueDate.value;
     const dueTime = taskDueTime.value;
+
     if (taskText === "") {
         alert("You must add a task mf!");
         return;
@@ -97,7 +106,7 @@ const addTask = () => {
     clone.querySelector(".taskText").textContent = taskText;
     clone.querySelector(".taskDescription").textContent = description;
     clone.querySelector(".taskDueDate").textContent = dueDate;
-    clone.querySelector(".taskDueTime").textContent = "at =" + dueTime;
+    clone.querySelector(".taskDueTime").textContent = dueTime ? "at " + dueTime : "";
 
     const doneButton = clone.querySelector(".doneTaskButton");
     const deleteButton = clone.querySelector(".deleteTaskButton");
@@ -110,30 +119,34 @@ const addTask = () => {
     listItem.appendChild(clone);
     taskList.appendChild(listItem);
 
-    doneButton.onclick = (e) => {
-    e.stopPropagation();
-    taskItem.classList.toggle("completed");
     saveLocally();
+
+    setTimeout(() => clearButtonShow(), 0);
+
+    doneButton.onclick = (e) => {
+        e.stopPropagation();
+        taskItem.classList.toggle("completed");
+        saveLocally();
     };
 
     deleteButton.onclick = (e) => {
         e.stopPropagation();
         listItem.remove();
         saveLocally();
+        clearButtonShow();
     };
-
 
     taskMain.addEventListener('click', () => {
         if (taskDetails.style.display === "none") {
             taskDetails.style.display = "block";
-            if (toggleIcon) toggleIcon.textContent = "↑"; 
+            if (toggleIcon) toggleIcon.textContent = "↑";
             taskItem.style.borderColor = '#007bff';
             taskItem.style.boxShadow = '0 0 8px rgba(0,123,255,0.2)';
             deleteButton.style.opacity = '1';
             doneButton.style.opacity = '1';
         } else {
             taskDetails.style.display = "none";
-            if (toggleIcon) toggleIcon.textContent = "↓"; 
+            if (toggleIcon) toggleIcon.textContent = "↓";
             taskItem.style.borderColor = '#ddd';
             taskItem.style.boxShadow = 'none';
             deleteButton.style.opacity = '0';
@@ -145,17 +158,33 @@ const addTask = () => {
     taskDescriptionInput.value = "";
     taskDueDate.value = "";
     taskDueTime.value = "";
-}
+};
 
 taskInput.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
         addTask();
     }
 });
+
 taskInput.focus();
 
-
-
-
 addTaskButton.addEventListener("click", addTask);
-window.addEventListener("load", loadTasksFromLocalStorage);
+
+window.addEventListener("load", () => {
+    loadTasksFromLocalStorage();
+    clearButtonShow();
+});
+
+function clearButtonShow() {
+    if (taskList.querySelectorAll("li").length > 0) {
+        clear.style.display = "block";
+    } else {
+        clear.style.display = "none";
+    }
+}
+
+clear.addEventListener("click", () => {
+    taskList.innerHTML = "";
+    saveLocally();
+    clearButtonShow();
+});
